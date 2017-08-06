@@ -40,6 +40,33 @@ LOCK TABLES `branch` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `class`
+--
+
+DROP TABLE IF EXISTS `class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `class` (
+  `class_id` int(11) NOT NULL,
+  `class_name` varchar(30) DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `room_no` int(11) DEFAULT NULL,
+  PRIMARY KEY (`class_id`),
+  KEY `room_no` (`room_no`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `class`
+--
+
+LOCK TABLES `class` WRITE;
+/*!40000 ALTER TABLE `class` DISABLE KEYS */;
+/*!40000 ALTER TABLE `class` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `customer`
 --
 
@@ -171,6 +198,102 @@ LOCK TABLES `rents` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `room`
+--
+
+DROP TABLE IF EXISTS `room`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `room` (
+  `room_no` int(11) NOT NULL,
+  `capacity` int(11) DEFAULT NULL,
+  `b_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`room_no`),
+  KEY `b_id` (`b_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `room`
+--
+
+LOCK TABLES `room` WRITE;
+/*!40000 ALTER TABLE `room` DISABLE KEYS */;
+/*!40000 ALTER TABLE `room` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `takes`
+--
+
+DROP TABLE IF EXISTS `takes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `takes` (
+  `c_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  PRIMARY KEY (`c_id`,`class_id`),
+  KEY `class_id` (`class_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `takes`
+--
+
+LOCK TABLES `takes` WRITE;
+/*!40000 ALTER TABLE `takes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `takes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `trainer`
+--
+
+DROP TABLE IF EXISTS `trainer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trainer` (
+  `t_id` int(11) NOT NULL,
+  `t_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`t_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trainer`
+--
+
+LOCK TABLES `trainer` WRITE;
+/*!40000 ALTER TABLE `trainer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trainer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `trains`
+--
+
+DROP TABLE IF EXISTS `trains`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trains` (
+  `t_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  PRIMARY KEY (`t_id`,`class_id`),
+  KEY `class_id` (`class_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trains`
+--
+
+LOCK TABLES `trains` WRITE;
+/*!40000 ALTER TABLE `trains` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trains` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `workout_group_list`
 --
 
@@ -203,4 +326,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-06 18:33:55
+-- Dump completed on 2017-08-06 23:21:15
