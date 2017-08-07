@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `attendts`
+--
+
+DROP TABLE IF EXISTS `attendts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `attendts` (
+  `c_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  PRIMARY KEY (`c_id`,`class_id`),
+  KEY `class_id` (`class_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attendts`
+--
+
+LOCK TABLES `attendts` WRITE;
+/*!40000 ALTER TABLE `attendts` DISABLE KEYS */;
+INSERT INTO `attendts` VALUES (2,1002),(3,1001);
+/*!40000 ALTER TABLE `attendts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `branch`
 --
 
@@ -36,6 +61,7 @@ CREATE TABLE `branch` (
 
 LOCK TABLES `branch` WRITE;
 /*!40000 ALTER TABLE `branch` DISABLE KEYS */;
+INSERT INTO `branch` VALUES (1,'Tejgaon Branch','Dhaka'),(2,'Dhanmondi Branch','Dhaka'),(3,'KUET Branch','Khulna');
 /*!40000 ALTER TABLE `branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,14 +74,16 @@ DROP TABLE IF EXISTS `class`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `class` (
   `class_id` int(11) NOT NULL,
-  `class_name` varchar(30) DEFAULT NULL,
-  `room_no` int(11) DEFAULT NULL,
-  `time_id` int(11) DEFAULT NULL,
   `g_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`class_id`),
+  `b_id` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `room_no` int(11) NOT NULL,
+  `shed_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`class_id`,`room_no`),
+  KEY `g_id` (`g_id`),
+  KEY `b_id` (`b_id`),
   KEY `room_no` (`room_no`),
-  KEY `time_id` (`time_id`),
-  KEY `g_id` (`g_id`)
+  KEY `shed_id` (`shed_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -65,6 +93,7 @@ CREATE TABLE `class` (
 
 LOCK TABLES `class` WRITE;
 /*!40000 ALTER TABLE `class` DISABLE KEYS */;
+INSERT INTO `class` VALUES (1001,1,1,'2017-07-12',101,NULL),(1002,3,1,'2017-07-12',101,NULL),(1003,2,1,'2017-07-12',102,NULL),(1006,3,2,'2017-07-12',101,NULL),(1007,2,2,'2017-07-12',101,NULL);
 /*!40000 ALTER TABLE `class` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +170,33 @@ CREATE TABLE `exercise` (
 
 LOCK TABLES `exercise` WRITE;
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
+INSERT INTO `exercise` VALUES (702,'Push Up'),(703,'Pull Up'),(704,'Barebell bench Press'),(705,'Sit-up'),(706,'Yoga'),(707,'Bent Knee Push up'),(701,'Squat');
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `group_has_exercise`
+--
+
+DROP TABLE IF EXISTS `group_has_exercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `group_has_exercise` (
+  `g_id` int(11) NOT NULL,
+  `exer_id` int(11) NOT NULL,
+  PRIMARY KEY (`g_id`,`exer_id`),
+  KEY `exer_id` (`exer_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `group_has_exercise`
+--
+
+LOCK TABLES `group_has_exercise` WRITE;
+/*!40000 ALTER TABLE `group_has_exercise` DISABLE KEYS */;
+INSERT INTO `group_has_exercise` VALUES (1,701),(1,702),(1,703),(2,701),(3,703),(5,706);
+/*!40000 ALTER TABLE `group_has_exercise` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -178,11 +233,11 @@ DROP TABLE IF EXISTS `owns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `owns` (
+  `c_id` int(11) NOT NULL,
+  `m_id` int(11) DEFAULT NULL,
   `creat_date` date NOT NULL,
   `expiry_date` date DEFAULT NULL,
   `status` char(5) DEFAULT NULL,
-  `c_id` int(11) NOT NULL,
-  `m_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`c_id`,`creat_date`),
   KEY `m_id` (`m_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -232,8 +287,8 @@ DROP TABLE IF EXISTS `room`;
 CREATE TABLE `room` (
   `room_no` int(11) NOT NULL,
   `capacity` int(11) DEFAULT NULL,
-  `b_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`room_no`),
+  `b_id` int(11) NOT NULL,
+  PRIMARY KEY (`room_no`,`b_id`),
   KEY `b_id` (`b_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -244,6 +299,7 @@ CREATE TABLE `room` (
 
 LOCK TABLES `room` WRITE;
 /*!40000 ALTER TABLE `room` DISABLE KEYS */;
+INSERT INTO `room` VALUES (101,14,1),(102,11,1),(103,19,1),(101,21,2),(201,21,2),(201,21,3),(202,18,3);
 /*!40000 ALTER TABLE `room` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,11 +311,11 @@ DROP TABLE IF EXISTS `schedules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schedules` (
-  `time_id` int(11) NOT NULL,
-  `day` date DEFAULT NULL,
-  `start_time` time DEFAULT NULL,
+  `shed_id` int(11) NOT NULL,
+  `day` varchar(15) NOT NULL,
+  `start_time` time NOT NULL,
   `end_time` time DEFAULT NULL,
-  PRIMARY KEY (`time_id`)
+  PRIMARY KEY (`shed_id`,`day`,`start_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -269,6 +325,7 @@ CREATE TABLE `schedules` (
 
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
+INSERT INTO `schedules` VALUES (501,'Sunday','04:00:00','06:00:00'),(501,'Monday','04:00:00','06:00:00'),(501,'Wednesday','04:00:00','06:00:00'),(501,'Thursday','04:00:00','06:00:00'),(502,'Sunday','06:00:00','08:00:00'),(502,'Monday','06:00:00','08:00:00'),(502,'wednesday','06:00:00','08:00:00'),(502,'Friday','06:00:00','08:00:00'),(502,'thursday','06:00:00','08:00:00'),(503,'Sunday','08:00:00','10:00:00'),(503,'Monday','08:00:00','10:00:00'),(503,'Tuesday','08:00:00','10:00:00'),(503,'thrusday','08:00:00','10:00:00');
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -316,6 +373,7 @@ CREATE TABLE `trainer` (
 
 LOCK TABLES `trainer` WRITE;
 /*!40000 ALTER TABLE `trainer` DISABLE KEYS */;
+INSERT INTO `trainer` VALUES (3001,'Rakib Hasan Ayon'),(3002,'K.M Arefeen Sultan'),(3003,'Amir Hamza'),(3004,'Richie Rozario');
 /*!40000 ALTER TABLE `trainer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,6 +398,7 @@ CREATE TABLE `trains` (
 
 LOCK TABLES `trains` WRITE;
 /*!40000 ALTER TABLE `trains` DISABLE KEYS */;
+INSERT INTO `trains` VALUES (1001,30001),(1002,30002),(1007,30004);
 /*!40000 ALTER TABLE `trains` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -376,4 +435,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-07 10:58:25
+-- Dump completed on 2017-08-07 18:24:06
