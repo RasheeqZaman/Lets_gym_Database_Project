@@ -183,7 +183,7 @@ public class Main_Design {
 		ArrayList<String> tableNamesList = db.showTables();
 		
 		comboBox = new JComboBox(tableNamesList.toArray());
-		comboBox.setBounds(257, 12, 108, 20);
+		comboBox.setBounds(215, 12, 200, 20);
 		panelStartPage.add(comboBox);
 		comboBox.addActionListener(new ActionListener() {
 			
@@ -212,11 +212,25 @@ public class Main_Design {
 		});
 		
 		
-		String queryTitle[] = {"This week's Class List"};
-		String query[] = {"select w.g_name, s.day, s.start_time, s.end_time, r.room_no, b.b_name from class as c inner join workout_group_list as w on w.g_id = c.workout_group_list_id inner join schedules as s on s.s_id = c.schedule_id inner join room as r on c.room_id = r.room_id inner join branch as b on b.b_id = r.branch_id;"};
-		String newColumnNames[][] = {{"Class Name", "Week Day", "Start TIme", "End Time", "Room No.", "Branch"}};
+		String queryTitle[] = {"This week's Class List", "Total amount earned by each membership", "Name of customers who paid money for platinum package", "Name of the customer who were attend in a branch", "Name of customer trains by  some trainer", "Show the capacity of each branch", "Name of trainer who takes class of workout group for this week", "Name of exercise attends by some customer"};
+		String query[] = {"select w.g_name, s.day, s.start_time, s.end_time, r.room_no, b.b_name from class as c inner join workout_group_list as w on w.g_id = c.workout_group_list_id inner join schedules as s on s.s_id = c.schedule_id inner join room as r on c.room_id = r.room_id inner join branch as b on b.b_id = r.branch_id;", 
+				"select m.m_name, sum(amount) from customer_pays_membership as cpm inner join customer_owns_membership as com on cpm.owns_id = com.com_id inner join membership as m on m.m_id = com.membership_id group by (membership_id);", 
+				"select c.c_name, m.m_name, cpm.payment_date, cpm.amount from customer_pays_membership as cpm inner join customer_owns_membership as com on cpm.owns_id = com.com_id inner join membership as m on m.m_id = com.membership_id inner join customer as c on c.c_id = com.customer_id where m_name = 'Platinum';", 
+				"select b.b_name,cu.c_name, ca.attents_date, c.class_id from branch as b inner join room as r on r.branch_id=b.b_id inner join class as c on c.room_id=r.room_id inner join customer_attends_class as ca on c.class_id=ca.class_id inner join customer as cu on ca.customer_id=cu.c_id;", 
+				"select c.c_name,s.s_name from customer as c inner join customer_attends_class as ca on c.c_id=ca.customer_id inner join class as cl on ca.class_id=cl.class_id inner join trainer_trains_class as tc on tc.class_id=cl.class_id inner join trainer as t on tc.t_id=t.t_id inner join staff as s on t.staff_id=s.s_id;", 
+				"select b.b_name,sum(r.capacity) from branch as b inner join room as r on r.branch_id=b.b_id group by b_id;", 
+				"select st.s_name, w.g_name, s.day from trainer as t inner join trainer_trains_class as ttc on t.staff_id = ttc.t_id inner join class as c on ttc.class_id = c.class_id inner join workout_group_list as w on w.g_id = c.workout_group_list_id inner join staff as st on st.s_id = t.staff_id inner join schedules as s on c.schedule_id = s.s_id;", 
+				"select c.c_name,e.exercise_name from customer as c inner join customer_attends_class as ca on c.c_id=ca.customer_id inner join class as cl on ca.class_id=cl.class_id inner join workout_group_list as w on w.g_id=cl.workout_group_list_id inner join exercise as e on w.g_id=e.exercise_id;"};
+		String newColumnNames[][] = {{"Class Name", "Week Day", "Start Time", "End Time", "Room No.", "Branch"}, 
+				{"Membership Name", "Total Amount Earned"}, 
+				{"Customer Name", "Membership Name", "Payment_Date", "Amount"}, 
+				{"Branch Name", "Customer Name", "Attending Date", "Class ID"}, 
+				{"Customer Name", "Trainer Name"}, 
+				{"Branch Name", "Capacity"}, 
+				{"Trainer Name", "Workout Group", "Day"}, 
+				{"Customer Name", "Exercise Name"}};
 		comboBox2 = new JComboBox(queryTitle);
-		comboBox2.setBounds(257, 42, 108, 20);
+		comboBox2.setBounds(215, 42, 200, 20);
 		panelStartPage.add(comboBox2);
 		comboBox2.addActionListener(new ActionListener() {
 			
