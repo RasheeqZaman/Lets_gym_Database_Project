@@ -213,7 +213,8 @@ public class Main_Design {
 		
 		
 		String queryTitle[] = {"This week's Class List"};
-		String quert[] = {"select"};
+		String query[] = {"select w.g_name, s.day, s.start_time, s.end_time, r.room_no, b.b_name from class as c inner join workout_group_list as w on w.g_id = c.workout_group_list_id inner join schedules as s on s.s_id = c.schedule_id inner join room as r on c.room_id = r.room_id inner join branch as b on b.b_id = r.branch_id;"};
+		String newColumnNames[][] = {{"Class Name", "Week Day", "Start TIme", "End Time", "Room No.", "Branch"}};
 		comboBox2 = new JComboBox(queryTitle);
 		comboBox2.setBounds(257, 42, 108, 20);
 		panelStartPage.add(comboBox2);
@@ -221,24 +222,13 @@ public class Main_Design {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ResultSet res = db.testQuery(comboBox.getSelectedItem().toString());
-				ArrayList<ArrayList<String>> r = db.getResult(res);
-		        cnames =null;
-				try {
-					cnames = db.getColumnNames(res);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				String[] columnNames = cnames.toArray(new String[cnames.size()]);
-				
+				ArrayList<ArrayList<String>> r = db.runQuery(query[comboBox2.getSelectedIndex()]);
 				Object[][] data = new Object[r.size()][];
 				for (int i = 0; i < r.size(); i++) {
 				    data[i] = r.get(i).toArray(new String[r.size()]);
 				}
 				
-				table_1 = new JTable(new DefaultTableModel(data, columnNames));
+				table_1 = new JTable(new DefaultTableModel(data, newColumnNames[comboBox2.getSelectedIndex()]));
 				scrollPane.setViewportView(table_1);
 			}
 		});
